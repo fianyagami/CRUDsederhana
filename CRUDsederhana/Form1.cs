@@ -44,7 +44,8 @@ namespace CRUDsederhana
                                                                 FROM T_CRUD_KRY ORDER BY NIK", koneksi.con);
                 DataSet ds = new DataSet();
                 adp.Fill(ds, "T_CRUD_KRY");
-                gridControl1.DataSource = ds.Tables[0];
+                dataGridView1.DataSource = ds.Tables[0];
+
             }
             catch (Exception ex)
             {
@@ -121,7 +122,7 @@ namespace CRUDsederhana
         //UBAH USER
         public void TampilKaryawanEdit()
         {
-            if (gridView1.DataRowCount == 0)
+            if (dataGridView1.RowCount == 0)
             {
                 MessageBox.Show("DATA MASIH KOSONG");
             }
@@ -135,12 +136,10 @@ namespace CRUDsederhana
                         koneksi.con.Close();
                     }
                     koneksi.con.Open();
-
-                    // Get your currently selected grid row
-                    var rowHandle = gridView1.FocusedRowHandle;
-
-                    // Get the value for the given column - convert to the type you're expecting
-                    var obj = gridView1.GetRowCellValue(rowHandle, "NIK");
+                    
+                    int selectedrowindex = dataGridView1.SelectedCells[0].RowIndex;
+                    DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+                    string obj = Convert.ToString(selectedRow.Cells["NIK"].Value);
 
                     //koneksi_manual.con.Open();
                     OracleCommand cmd = new OracleCommand();
@@ -245,7 +244,7 @@ namespace CRUDsederhana
         {
             try
             {
-                if (gridView1.DataRowCount == 0)
+                if (dataGridView1.RowCount == 0)
                 {
                     MessageBox.Show("DATA MASIH KOSONG");
                 }
@@ -263,11 +262,9 @@ namespace CRUDsederhana
                         //koneksi_manual.con.Open();
                         OracleCommand cmd = new OracleCommand();
 
-                        // Get your currently selected grid row
-                        var rowHandle = gridView1.FocusedRowHandle;
-
-                        // Get the value for the given column - convert to the type you're expecting
-                        var obj = gridView1.GetRowCellValue(rowHandle, "NIK");
+                        int selectedrowindex = dataGridView1.SelectedCells[0].RowIndex;
+                        DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+                        string obj = Convert.ToString(selectedRow.Cells["NIK"].Value);
 
                         //koneksi_manual.con.Open();
                         cmd.CommandText = "DELETE FROM T_CRUD_KRY WHERE NIK = '" + obj + "'";
@@ -293,48 +290,48 @@ namespace CRUDsederhana
             txtAlamat.ResetText();
             cbDept.ResetText();
             checkAktif.Checked = false;
+        }       
+
+        private void gridView1_RowClick(object sender, DevExpress.XtraGrid.Views.Grid.RowClickEventArgs e)
+        {
+            TampilKaryawanEdit();
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void btnSave_Click_1(object sender, EventArgs e)
         {
             SimpanDataKaryawan();
             ResetInputan();
         }
 
-        private void btnUpdate_Click(object sender, EventArgs e)
+        private void btnUpdate_Click_1(object sender, EventArgs e)
         {
             UbahDataKaryawan();
             ResetInputan();
         }
 
-        private void gridControl1_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void simpleButton1_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void btnRefresh_Click(object sender, EventArgs e)
-        {
-            TampilDataKaryawan();
-        }
-
-        private void simpleButton2_Click(object sender, EventArgs e)
-        {
-            ResetInputan();
-        }
-
-        private void btnDelete_Click(object sender, EventArgs e)
+        private void btnDelete_Click_1(object sender, EventArgs e)
         {
             HapusDataKaryawan();
             TampilDataKaryawan();
             ResetInputan();
         }
 
-        private void gridView1_RowClick(object sender, DevExpress.XtraGrid.Views.Grid.RowClickEventArgs e)
+        private void btnRefresh_Click_1(object sender, EventArgs e)
+        {            
+            TampilDataKaryawan();
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            ResetInputan();
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             TampilKaryawanEdit();
         }
